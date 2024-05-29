@@ -3,12 +3,35 @@ import React, { useState } from "react"
 
 import { DownloadedFile } from "../../utils/utils"
 import Modal from "../Modal"
+import { MagnifyingGlassIcon } from "@heroicons/react/16/solid"
 
 export default function Table({ items }: any) {
     const [open, setOpen] = useState(false)
-
+    const [search, setSearch] = useState('')
+    const updatedItems = items.filter((item: any) => item.file_path.toLowerCase().includes(search))
     return (
-        <div className="px-4 sm:px-6 lg:px-8">
+    <div className="px-4 sm:px-6 lg:px-8">
+        <div className="flex flex-1 h-10 mb-3 gap-x-4 self-stretch lg:gap-x-6">
+              <form className="relative flex flex-1" action="#" method="GET">
+                <label htmlFor="search-field" className="sr-only">
+                  Search
+                </label>
+                <MagnifyingGlassIcon
+                  className="pointer-events-none mx-2 absolute inset-y-0 left-0 h-full w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+                <input
+                  id="search-field"
+                  className="block h-full w-full border-0 py-0 pl-8 pr-0 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm"
+                  placeholder="Search..."
+                  type="search"
+                  name="search"
+                  onChange={(e)=>{
+                    setSearch(e.target.value)
+                  }}
+                />
+              </form>
+        </div>
         <Modal open={open} setOpen={setOpen}/>
         <div className="sm:flex sm:items-center">
             <div className="sm:flex-auto">
@@ -51,7 +74,7 @@ export default function Table({ items }: any) {
                     </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                    {items.map((item: DownloadedFile) => (
+                    {updatedItems.map((item: DownloadedFile) => (
                         <tr key={item.id}>
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                             {item.host_name}
@@ -69,6 +92,6 @@ export default function Table({ items }: any) {
             </div>
             </div>
         </div>
-        </div>
+    </div>
     )
 }
